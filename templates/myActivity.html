@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attendee</title>
+    <!-- <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}"> -->
+    <link rel="stylesheet" href="../static/css/main.css" />
+    <link rel="stylesheet" href="../static/css/activity.css" />
+    <script type="text/javascript" src="../static/js/activity.js"></script>
+    <!-- <script type="text/javascript" src="../static/js/jquery.js"></script> -->
+    <script type="text/javascript" src="{{url_for('static', filename='js/jquery.js')}}"></script>
+</head>
+
+<body>
+    <header>
+        <img src="../static/img/logo.svg" class="logo" />
+        <nav>
+            <ul class="nav_links">
+                <li><a href="{{url_for('index')}}">Main</a></li>
+                <li><a href="{{url_for('activity')}}" rel="external nofollow">Activity</a></li>
+                <li><a href="{{url_for('myActivity')}}" rel="external nofollow">My Activity</a></li>
+            </ul>
+        </nav>
+        <div>
+
+            <span class="welcome">Welcome,{{name}}</span>
+            <a href="#" class="cta"><button>Contact</button></a>
+        </div>
+    </header>
+    <div class="container">
+        <div class="info">
+            {% with messages = get_flashed_messages() %} {% if messages %} {{ messages }} {% endif %} {% endwith %}
+        </div>
+        <div class="activitesList">
+            <table>
+                <caption>My Created Activity List</caption>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Begin</th>
+                        <th>End</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ct in orgcontent %}
+                    <tr>
+                        <td>{{ ct.title }}</td>
+                        <td>{{ ct.bgtime }}</td>
+                        <td>{{ ct.endtime }}</td>
+                        <td>{{ ct.status }}</td>
+                        <td>
+                            <a href="{{url_for('participants', id=ct.id)}}">Show Attendees</a> {% if ct.status!="Canceled" %}
+                            <br><br><br>
+                            <button class="cancel" onclick="calcel(this.id)" id={{ct.id}}>Cancel</button> {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br><br>
+            <table>
+                <caption>My Participe Activity List</caption>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Begin</th>
+                        <th>End</th>
+                        <th>Status</th>
+                        <th>Organiser Name</th>
+                        <th>Ticket</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ct in content %}
+                    <tr>
+                        <td>{{ ct.title }}</td>
+                        <td>{{ ct.bgtime }}</td>
+                        <td>{{ ct.endtime }}</td>
+                        <td>{{ ct.status }}</td>
+                        <td>{{ ct.organiser }}</td>
+                        <td>{{ ct.ticketCode }}</td>
+                        <td>
+                            <a href="{{url_for('details', id=ct.id)}}">more</a>
+                            <br><br>
+                            <button onclick="refund(this)" class={{ct.ticketCode}}>Cancel</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
